@@ -13,8 +13,10 @@ public class Controller {
 
         public static void main(String[] args) {
             
-            searchEngine a = new searchEngine();
-            a.procuraIdade("Roberto Carlos");
+            //searchEngine a = new searchEngine();
+            //a.procuraIdade("Roberto Carlos");
+            botTwitter bot = new botTwitter();
+            bot.login();
         }
 
 }
