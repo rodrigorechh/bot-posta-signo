@@ -25,15 +25,26 @@ public class botTwitter extends browserManager{
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         WebElement element;
         element = driver.findElement(By.cssSelector(".js-username-field"));
-        element.sendKeys("email");
+        element.sendKeys("user");
         element = driver.findElement(By.cssSelector(".js-password-field"));
         element.sendKeys("password");
         element.submit();
         driver.get("https://twitter.com/notifications/mentions"); 
         
         List<WebElement> elements = driver.findElements(By.cssSelector("[class = \"css-4rbku5 css-18t94o4 css-901oao r-111h2gw r-1loqt21 r-1q142lx r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-3s2u2q r-qvutc0\"]"));
-
         JSONObject mentions = new JSONObject();
+        mentions = this.updateJson(elements, mentions);
+
+        return driver;
+    }
+    
+    /**
+     *recebe 
+     * @param elements
+     * @param mentions
+     * @return 
+     */
+    public JSONObject updateJson(List<WebElement> elements, JSONObject mentions){
         
         for(int i = 0; i<elements.size(); i++){//adiciona cada mention encontrada no json, caso não esteja
             String idTwitter = elements.get(i).getAttribute("href");
@@ -42,8 +53,17 @@ public class botTwitter extends browserManager{
                 mentions.put(idTwitter, "false");
             }
         }
-        System.out.println(mentions.toString());       
+    
+        //System.out.println(mentions.);
+    
 
-        return driver;
-    }
+
+        System.out.println(mentions.toString());  
+        return mentions;
+}
+    
+//    public void searchJsonWithFalse(JSONObject mentions){
+//        System.out.println(mentions.optNumber(1));
+//    }
+
 }

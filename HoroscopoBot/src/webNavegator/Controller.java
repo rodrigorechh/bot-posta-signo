@@ -9,6 +9,8 @@ package webNavegator;
  *
  * @author Rodrigo
  */
+import org.json.JSONObject;
+
 public class Controller {
 
         public static void main(String[] args) {
@@ -17,6 +19,7 @@ public class Controller {
             //a.procuraIdade("Roberto Carlos");
             botTwitter bot = new botTwitter();
             bot.login();
+
         }
 
 }
