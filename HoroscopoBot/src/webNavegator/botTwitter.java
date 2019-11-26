@@ -33,7 +33,10 @@ public class botTwitter extends browserManager{
         
         List<WebElement> elements = driver.findElements(By.cssSelector("[class = \"css-4rbku5 css-18t94o4 css-901oao r-111h2gw r-1loqt21 r-1q142lx r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-3s2u2q r-qvutc0\"]"));
         JSONObject mentions = new JSONObject();
-        mentions = this.updateJson(elements, mentions);
+        for(int i = 0; i<elements.size(); i++){
+            //invoca
+        }
+        //mentions = this.updateJson(elements, mentions);
 
         return driver;
     }
@@ -61,6 +64,19 @@ public class botTwitter extends browserManager{
         System.out.println(mentions.toString());  
         return mentions;
 }
+    public JSONArray updateArray(JSONArray mentions, String link){
+        for(int i=0; i < mentions.length(); i++){
+            JSONObject temporaryMention = mentions.get(i);
+            if(link == temporaryMention.getString(link))
+                return mentions;
+        }
+        //só chega nesse ponto caso não esteja no array
+        JSONObject newMention = new JSONObject();
+        newMention.put("link", link);
+        newMention.put("acessado", false);
+        mentions.put(newMention);
+        return mentions;
+    }
     
 //    public void searchJsonWithFalse(JSONObject mentions){
 //        System.out.println(mentions.optNumber(1));
