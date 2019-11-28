@@ -9,16 +9,18 @@ package webNavegator;
  *
  * @author Rodrigo
  */
+import java.io.IOException;
 import org.json.JSONObject;
 
 public class Controller {
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws IOException {
             
             //searchEngine a = new searchEngine();
             //a.procuraIdade("Roberto Carlos");
             botTwitter bot = new botTwitter();
             bot.login();
+            bot.searchForQuestions();
 
         }
 
