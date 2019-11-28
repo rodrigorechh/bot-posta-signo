@@ -23,49 +23,52 @@ import org.openqa.selenium.WebElement;
  */
 public class botTwitter extends browserManager{
     
-    public WebDriver login() throws IOException{
+    private JSONObject mentions;
+    private WebDriver driver;
+    
+    public void login(){
         /*O método abre o navegador e efetua o login no twitter*/
-        WebDriver driver = super.openChrome();
-        driver.get("http://www.twitter.com/login");
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        this.driver = super.openChrome();
+        this.driver.get("http://www.twitter.com/login");
+        this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         WebElement element;
-        element = driver.findElement(By.cssSelector(".js-username-field"));
+        element = this.driver.findElement(By.cssSelector(".js-username-field"));
         element.sendKeys("user");
-        element = driver.findElement(By.cssSelector(".js-password-field"));
+        element = this.driver.findElement(By.cssSelector(".js-password-field"));
         element.sendKeys("password");
         element.submit();
-        driver.get("https://twitter.com/notifications/mentions"); 
-        
-        List<WebElement> elements = driver.findElements(By.cssSelector("[class = \"css-4rbku5 css-18t94o4 css-901oao r-111h2gw r-1loqt21 r-1q142lx r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-3s2u2q r-qvutc0\"]"));
-        JSONObject mentions = createJson(elements);
-        this.writeJsonTxt(mentions);
-        this.readJsonTxt();
-        return driver;
     }
     
-    private JSONObject createJson(List<WebElement> elements) throws IOException{
-        JSONObject mentions = new JSONObject(this.readJsonTxt());
+    public void searchForQuestions() throws IOException {
+        this.driver.get("https://twitter.com/notifications/mentions"); 
+        List<WebElement> elements = this.driver.findElements(By.cssSelector("[class = \"css-4rbku5 css-18t94o4 css-901oao r-111h2gw r-1loqt21 r-1q142lx r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-3s2u2q r-qvutc0\"]"));
+        this.createJson(elements);
+        
+        this.writeJsonInDisc();
+    }
+    private void createJson(List<WebElement> elements) throws IOException{
+        JSONObject mentionsTemporary = new JSONObject(this.readJsonToDisc());
         JSONArray array = new JSONArray();
         for(int i = 0; i<elements.size(); i++){
             String linkTwitter = elements.get(i).getAttribute("href");
             array = this.updateArray(array, linkTwitter);
         }
-        mentions.put("mentions", array);
+        mentionsTemporary.put("mentions", array);
         
-        return mentions;
+        this.mentions = mentionsTemporary;
     }
     
     /*
     Escreve no json.txt um JSONObject recebido
     */
-    private void writeJsonTxt(JSONObject mentions) throws IOException{
-        String mentionsString = mentions.toString();
+    private void writeJsonInDisc() throws IOException{
+        String mentionsString = this.mentions.toString();
         try (FileWriter save = new FileWriter("json.txt")) {
             save.write(mentionsString);
         }
     }
 
-    private String readJsonTxt() throws FileNotFoundException, IOException{
+    private String readJsonToDisc() throws FileNotFoundException, IOException{
         FileReader arqLeitura = new FileReader("json.txt");
         BufferedReader buffer = new BufferedReader(arqLeitura);
         String readText = buffer.readLine();
