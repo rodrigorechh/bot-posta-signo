@@ -32,9 +32,9 @@ public class botTwitter extends browserManager{
         this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         WebElement element;
         element = this.driver.findElement(By.cssSelector(".js-username-field"));
-        element.sendKeys("digaorech@hotmail.com");
+        element.sendKeys("user");
         element = this.driver.findElement(By.cssSelector(".js-password-field"));
-        element.sendKeys("ciamirim5");
+        element.sendKeys("password");
         element.submit();
     }
     /*
@@ -85,16 +85,27 @@ public class botTwitter extends browserManager{
     }
             
     private JSONArray updateArray(JSONArray mentions, String link){
-        for(int i=0; i < mentions.length(); i++){
+        for(int i=0; i<mentions.length(); i++){
             JSONObject temporaryMention = new JSONObject(mentions.get(i));
             if(temporaryMention.has(link))//caso já esteja no array
                 return mentions;
         }
         JSONObject newMention = new JSONObject();
         newMention.put("link", link);
-        newMention.put("acessado", false);
+        newMention.put("access", false);
         mentions.put(newMention);
         return mentions;
     }
+    
+    private String throughArray(JSONArray mentions){
+        for(int i=0; i<mentions.length(); i++){
+            if(!mentions.getJSONObject(i).getBoolean("access"))//se acess for falso
+                return mentions.getJSONObject(i).getString("link");//retorna link
+                
+        }
+        return null;//se não existe nenhum access falso, retorna null
+    } 
    
+
+
 }
